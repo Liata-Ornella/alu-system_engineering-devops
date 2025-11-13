@@ -1,29 +1,25 @@
 #!/usr/bin/env bash
-# Install Nginx and serve a page with "Holberton School" on web-01
+# Installs Nginx with the following configurations:
+#+    Listens on port 80.
+#+    Returns a page containing "Holberton School" when queried
+#+    at the root with a curl GET request.
 
-apt-get update -y
+apt-get update
 apt-get install -y nginx
 
 mkdir -p /var/www/html
 echo "Holberton School for the win!" > /var/www/html/index.html
 
-cat << 'EOF' > /etc/nginx/sites-available/default
-server {
+printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
-
     root /var/www/html;
     index index.html index.htm;
-
     server_name _;
-
     location / {
-        try_files $uri $uri/ =404;
+        try_files \$uri \$uri/ =404;
     }
 }
-EOF
+" > /etc/nginx/sites-available/default
 
 service nginx restart
-
-# Optional check
-curl -s -o /dev/null -w "%{http_code}" localhost
