@@ -1,26 +1,21 @@
 #!/usr/bin/env bash
-# Fully compliant Holberton web server setup script
+# Holberton compliant Nginx web server script
 
-# Update package list
+# Update packages
 apt-get update -y
 
 # Install Nginx
 apt-get install nginx -y
 
-# Start Nginx service (without systemctl)
+# Start Nginx service
 service nginx start
 
-# Ensure default Nginx site listens on port 80
+# Replace default index page with exactly "Holberton School"
+printf "Holberton School" > /var/www/html/index.html
+
+# Ensure default server block listens on port 80
 sed -i 's/listen 80 default_server;/listen 80 default_server;/' /etc/nginx/sites-available/default
 sed -i 's/listen \[::\]:80 default_server;/listen [::]:80 default_server;/' /etc/nginx/sites-available/default
 
-# Replace default index page with exact message
-echo -n "Holberton School for the win!" > /var/www/html/index.html
-
-# Restart Nginx to apply changes
+# Restart Nginx
 service nginx restart
-
-# Allow HTTP traffic through firewall if ufw exists
-if command -v ufw >/dev/null 2>&1; then
-    ufw allow 'Nginx HTTP'
-fi
