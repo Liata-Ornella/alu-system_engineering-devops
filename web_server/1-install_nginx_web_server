@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
-# Installs Nginx on web-01 configured to serve a page at /
-# containing "Holberton School" and listening on port 80.
+# Install Nginx and serve a page with "Holberton School" on web-01
 
-# Update package list and install nginx non-interactively
 apt-get update -y
 apt-get install -y nginx
 
-# Ensure web root exists and create the index page
 mkdir -p /var/www/html
 echo "Holberton School for the win!" > /var/www/html/index.html
 
-# Configure default Nginx server block to listen on port 80
 cat << 'EOF' > /etc/nginx/sites-available/default
 server {
     listen 80 default_server;
@@ -27,8 +23,7 @@ server {
 }
 EOF
 
-# Restart Nginx using service (works without systemctl)
 service nginx restart
 
-# Optional: Verify it works locally (will return 200 if successful)
+# Optional check
 curl -s -o /dev/null -w "%{http_code}" localhost
