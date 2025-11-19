@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Configure Nginx to add a custom HTTP header X-Served-By with the server hostname
+
+# Update package list and install Nginx
+apt-get update -y
+apt-get install -y nginx
+
+# Create a simple index page if it doesn't exist
+if [ ! -f /var/www/html/index.html ]; then
+    echo "Holberton School for the win!" | sudo tee /var/www/html/index.html
+fi
+
+# Add X-Served-By header to Nginx configuration if not already present
+if ! grep -q "add_header X-Served-By" /etc/nginx/sites-available/default; then
+    sed -i "/server_name _;/a \\
+\tadd_header X-Served-By \$hostname;" /etc/nginx/sites-available/default
+fi
+
+# Test Nginx configuration
+nginx -t
+
+# Restart Nginx to apply changes
+service nginx restart
