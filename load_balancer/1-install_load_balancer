@@ -86,3 +86,4 @@ echo "web-02"
 
 # Optional helpful info
 echo "HAProxy configured. To test run: for i in {1..6}; do curl -Is http://<LB_IP> | grep X-Served-By; done"
+echo $HOSTNAME
